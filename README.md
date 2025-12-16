@@ -9,7 +9,15 @@ A microphone detects sound, an LM358 comparator processes the signal, and a 555 
 ## System Block Diagram
 Sound → Microphone → LM358 Comparator → 555 Timer → LED
 
-![Block Diagram](schematic.png)
+![Block Diagram](<img width="563" height="412" alt="image" src="https://github.com/user-attachments/assets/ff4a6b6b-ae98-4fa5-a11b-02b28ecd3666" />
+)
+<br>
+The microphone (or pushbutton in simulation) generates a pulse that is fed 
+into the LM358 comparator. When the input exceeds the threshold set by 
+the potentiometer, the comparator output triggers the 555 timer in 
+monostable mode. The 555 generates a single output pulse of approximately 
+3 seconds, which drives the LED.
+
 
 ---
 
