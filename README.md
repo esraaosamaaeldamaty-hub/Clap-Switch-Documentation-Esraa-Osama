@@ -256,7 +256,13 @@ The 330 Ω resistor is used to limit the current flowing through the LED and pro
 - The LED turns ON when a loud clap is detected.
 - The LED remains ON for approximately 3.3 seconds.
 - The potentiometer allows sensitivity adjustment.
+<br>
+<br>
+<img width="448" height="721" alt="image" src="https://github.com/user-attachments/assets/0c961dc2-cea5-40ae-bf8d-e2d407cd7016" />
+<br>
+<br>
 ---
+
 ## Testing & Troubleshooting
 If something goes wrong during testing, here are common issues and fixes:
 
