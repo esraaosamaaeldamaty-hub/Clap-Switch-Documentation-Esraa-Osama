@@ -1,4 +1,14 @@
 # Clap Switch Using LM358 and 555 Timer
+Have you ever wished you could turn on a light without touching a switch?
+This project demonstrates a sound‑activated clap switch, which detects a loud clap using a microphone (or a pushbutton in simulation) and triggers a 3‑second timer output using a 555 IC.
+
+This guide is perfect for:
+
+Beginners learning analog electronics
+
+Students building sensor‑based circuits
+
+Anyone who wants to understand how comparators and timers work together
 
 ## Project Overview
 This project implements a sound-activated switch using analog electronics.
@@ -12,6 +22,8 @@ Sound → Microphone → LM358 Comparator → 555 Timer → LED
 ![Block Diagram]
 <br>
 <br>
+<img width="471" height="114" alt="image" src="https://github.com/user-attachments/assets/75da8202-4d92-4d4d-8e9b-7ddb085e458f" />
+
 <img width="563" height="412" alt="image" src="https://github.com/user-attachments/assets/ff4a6b6b-ae98-4fa5-a11b-02b28ecd3666" />
 <br>
 
@@ -25,17 +37,22 @@ monostable mode. The 555 generates a single output pulse of approximately
 ---
 
 ## Components Used
-- 1x Electret Microphone
-- 1x LM358 Operational Amplifier
-- 1x NE555 Timer
-- 3 × 100kΩ resistors (connected in series)
-- 1x 10kΩ Potentiometer
-- 1x 10µF Capacitor
-- 1x 1µF Capacitor
-- 1x Green LED
-- 1x 330Ω Resistor
-- 1x Breadboard
-- 1x DC Power Supply 9V
+| Component               | Quantity | Description                                          |
+| ----------------------- | -------- | ---------------------------------------------------- |
+| LM358 Op‑Amp            | 1        | Used as a sound comparator                           |
+| NE555 Timer             | 1        | Generates the monostable pulse                       |
+| Electret Microphone     | 1        | Detects the clap sound (or pushbutton in simulation) |
+| 10 kΩ Resistor          | 2        | Mic bias + comparator connections                    |
+| 330 Ω Resistor          | 1        | LED current limiting                                 |
+| 100 kΩ Resistors        | 3        | Timing resistor (total 300 kΩ)                       |
+| Potentiometer 10 kΩ     | 1        | Adjusts comparator threshold                         |
+| 1 µF Capacitor          | 1        | AC coupling for the microphone                       |
+| 10 µF Capacitor         | 1        | Timing capacitor for the 555                         |
+| LED                     | 1        | Output indicator                                     |
+| Breadboard              | 1        | For prototyping                                      |
+| Jumper Wires            | Several  | For connections                                      |
+| Power Supply (9V) | 1        | Circuit power                                        |
+
 <br>
 <br>
 
@@ -66,8 +83,27 @@ The circuit was implemented on a breadboard as shown.
 )
 
 ---
+## How It Works (Theory)
+This circuit consists of two main stages:
 
-## 555 Timer Configuration
+A) The Sensor Stage — LM358 Comparator
+The microphone generates a very small audio signal.
+This signal passes through a 1 µF capacitor for AC coupling (so only sound pulses reach the comparator).
+
+Inside the LM358:
+
+IN+ (Pin 3) receives the microphone's amplified pulse.
+
+IN− (Pin 2) receives a reference voltage set by a 10 kΩ potentiometer.
+
+If the sound level is higher than the threshold:
+
+👉 The LM358 output goes LOW, which triggers the 555 Timer.
+
+This is the key function of a comparator:
+Compare a signal to a reference — output reacts only when the signal exceeds the threshold.
+<br>
+B)555 Timer Configuration
 The 555 timer is configured in monostable mode.
 
 Three 100kΩ resistors are connected in series to replace the unavailable 270kΩ resistor.
@@ -95,6 +131,22 @@ The microphone is placed near the LM358’s input so the signal path stays short
 At this stage, we are only placing components, without wiring them yet.
 
 <br>
+🔎 Note: Microphone Polarity Issue (Important Discovery)
+During testing, we initially assumed that the electret microphone was non‑polarized, but later discovered that it is actually polarized.
+Because of this, the microphone terminals were connected backwards, which caused the circuit to behave incorrectly.
+
+To identify the correct polarity:
+
+We used a multimeter (continuity mode) to check which terminal is internally connected to the microphone’s metallic casing.
+
+The terminal that showed continuity with the metal body is the negative (−) terminal.
+
+The remaining terminal is the positive (+) input.
+
+After correcting the polarity on the breadboard, the microphone stage started working as expected.
+
+<br>
+
 ✅ Step 3: Microphone Connections
 <br> <p align="center"> <img width="300" src="https://github.com/user-attachments/assets/62c126e8-871f-409c-b56b-19682014dbf7" /> </p>
 First, we connect the microphone terminals:
@@ -205,7 +257,35 @@ The 330 Ω resistor is used to limit the current flowing through the LED and pro
 - The LED remains ON for approximately 3.3 seconds.
 - The potentiometer allows sensitivity adjustment.
 ---
+## Testing & Troubleshooting
+If something goes wrong during testing, here are common issues and fixes:
 
+1- Problem: LED stays ON all the time
+Cause: Pin 2 (Trigger) is stuck LOW
+Fix:
+Ensure LM358 output is not constantly LOW
+Check that pins 6 & 7 are not shorted to GND
+Check timing capacitor orientation
+
+2- Problem: LED never turns ON
+Cause: Comparator threshold is too high
+Fix:
+Rotate the potentiometer until LM358 output changes
+Verify microphone or button signal
+Check power to LM358 (Pin 8 = VCC, Pin 4 = GND)
+3- Problem: LED pulse is too short
+Cause: Timing capacitor too small
+Fix:
+Use 10 µF instead of 1 µF
+Increase timing resistor value
+4-Problem: Circuit triggers randomly (noise)
+Cause: Floating trigger or weak grounding
+Fix:
+Ensure pull‑down resistors are in place
+Keep wires short
+Ensure microphone GND is solid
+
+---
 ## Conclusion
 This project demonstrates a practical application of analog signal processing and timing circuits using LM358 and 555 timer ICs.
 
